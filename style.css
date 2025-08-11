@@ -1,0 +1,99 @@
+body {
+  background: linear-gradient(135deg, #5a2a83, #22427c);
+  font-family: Arial, sans-serif;
+  color: white;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background: #2c1a54;
+  padding: 30px 40px;
+  border-radius: 10px;
+  width: 350px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tabs button {
+  background: #3e2a74;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.tabs button.active {
+  background: #5a4cb1;
+  box-shadow: 0 0 8px #6b5ecc;
+}
+
+.form {
+  display: none;
+  flex-direction: column;
+}
+
+.form.active {
+  display: flex;
+}
+
+.form input {
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+.form button {
+  background: #5a4cb1;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.3s ease;
+}
+
+.form button:hover {
+  background: #7a6cd1;
+}
+
+.msg {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.sucesso {
+  font-size: 1.2em;
+  color: #a2e05f;
+}
+
+.poesia {
+  margin-top: 20px;
+  font-style: italic;
+  color: #b8a0ff;
+  font-size: 1.1em;
+}
+
+.poesia span {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.9em;
+  color: #9a84f1;
+}

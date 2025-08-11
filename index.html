@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sistema Login Básico</title>
+<style>
+  body {
+    background: linear-gradient(135deg, #4b2e83, #1e3c72);
+    font-family: Arial, sans-serif;
+    color: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  #container {
+    background: #2e205b;
+    padding: 30px 40px;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 0 0 15px #6a54bd;
+    text-align: center;
+  }
+  button.tab-btn {
+    background: #3a2f6d;
+    border: none;
+    padding: 10px 25px;
+    margin: 0 5px;
+    border-radius: 20px;
+    color: #bbb;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+  }
+  button.tab-btn.active,
+  button.tab-btn:hover {
+    background: #6a54bd;
+    color: #eee;
+    box-shadow: 0 0 10px #9f8fff;
+  }
+  form {
+    margin-top: 20px;
+  }
+  input[type=text],
+  input[type=email],
+  input[type=password] {
+    width: 100%;
+    padding: 10px 12px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  button.submit-btn {
+    background: #6a54bd;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    color: #eee;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+  }
+  button.submit-btn:hover {
+    background: #8f7fee;
+  }
+  #mensagem {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  #mensagem.error {
+    color: #ff4c4c;
+  }
+  #mensagem.success {
+    color: #90ee90;
+  }
+  #success-screen {
+    display: none;
+  }
+  #success-screen h2 {
+    color: #c9b3ff;
+    margin-bottom: 10px;
+  }
+  #success-screen p {
+    font-size: 14px;
+    color: #ddd;
+  }
+</style>
+</head>
+<body>
+<div id="container">
+  <div>
+    <button class="tab-btn active" id="btn-login">Login</button>
+    <button class="tab-btn" id="btn-cadastro">Cadastro</button>
+  </div>
+
+  <div id="login-form">
+    <h2>Login</h2>
+    <form id="form-login">
+      <input type="email" id="login-email" placeholder="Email" required />
+      <input type="password" id="login-senha" placeholder="Senha" required />
+      <button type="submit" class="submit-btn">Entrar</button>
+    </form>
+    <div id="mensagem" class=""></div>
+  </div>
+
+  <div id="cadastro-form" style="display:none;">
+    <h2>Cadastro</h2>
+    <form id="form-cadastro">
+      <input type="text" id="cadastro-nome" placeholder="Nome" required />
+      <input type="email" id="cadastro-email" placeholder="Email" required />
+      <input type="password" id="cadastro-senha" placeholder="Senha" required />
+      <button type="submit" class="submit-btn">Cadastrar</button>
+    </form>
+    <div id="mensagem-cadastro" class=""></div>
+  </div>
+
+  <div id="success-screen">
+    <h2>Login realizado com sucesso!</h2>
+    <p>
+      “A vida é mesmo coisa muito frágil, uma bobagem.
+      <br />
+      Pra quem vive, pras pessoas que vivem, a vida é muito mais que isso.”
+      <br />
+      — Charlie Brown Jr.
+    </p>
+  </div>
+</div>
+
+<script>
+  const btnLogin = document.getElementById('btn-login');
+  const btnCadastro = document.getElementById('btn-cadastro');
+  const loginForm = document.getElementById('login-form');
+  const cadastroForm = document.getElementById('cadastro-form');
+  const mensagem = document.getElementById('mensagem');
+  const mensagemCadastro = document.getElementById('mensagem-cadastro');
+  const successScreen = document.getElementById('success-screen');
+
+  btnLogin.onclick = () => {
+    btnLogin.classList.add('active');
+    btnCadastro.classList.remove('active');
+    loginForm.style.display = 'block';
+    cadastroForm.style.display = 'none';
+    mensagem.textContent = '';
+    mensagem.className = '';
+    mensagemCadastro.textContent = '';
+    mensagemCadastro.className = '';
+    successScreen.style.display = 'none';
+  };
+
+  btnCadastro.onclick = () => {
+    btnCadastro.classList.add('active');
+    btnLogin.classList.remove('active');
+    cadastroForm.style.display = 'block';
+    loginForm.style.display = 'none';
+    mensagem.textContent = '';
+    mensagem.className = '';
+    mensagemCadastro.textContent = '';
+    mensagemCadastro.className = '';
+    successScreen.style.display = 'none';
+  };
+
+  // Cadastro
+  document.getElementById('form-cadastro').onsubmit = async (e) => {
+    e.preventDefault();
+    mensagemCadastro.textContent = '';
+    mensagemCadastro.className = '';
+
+    const nome = document.getElementById('cadastro-nome').value.trim();
+    const email = document.getElementById('cadastro-email').value.trim();
+    const senha = document.getElementById('cadastro-senha').value.trim();
+
+    try {
+      const res = await fetch('cadastro.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, email, senha }),
+      });
+      const data = await res.json();
+
+      if (data.sucesso) {
+        mensagemCadastro.textContent = data.mensagem;
+        mensagemCadastro.className = 'success';
+        document.getElementById('form-cadastro').reset();
+      } else {
+        mensagemCadastro.textContent = data.mensagem;
+        mensagemCadastro.className = 'error';
+      }
+    } catch (error) {
+      mensagemCadastro.textContent = 'Erro na requisição.';
+      mensagemCadastro.className = 'error';
+    }
+  };
+
+  // Login
+  document.getElementById('form-login').onsubmit = async (e) => {
+    e.preventDefault();
+    mensagem.textContent = '';
+    mensagem.className = '';
+
+    const email = document.getElementById('login-email').value.trim();
+    const senha = document.getElementById('login-senha').value.trim();
+
+    try {
+      const res = await fetch('login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha }),
+      });
+      const data = await res.json();
+
+      if (data.sucesso) {
+        // Mostra tela de sucesso com poesia
+        loginForm.style.display = 'none';
+        btnLogin.style.display = 'none';
+        btnCadastro.style.display = 'none';
+        mensagem.textContent = '';
+        mensagem.className = '';
+        successScreen.style.display = 'block';
+      } else {
+        mensagem.textContent = data.mensagem;
+        mensagem.className = 'error';
+      }
+    } catch (error) {
+      mensagem.textContent = 'Erro na requisição.';
+      mensagem.className = 'error';
+    }
+  };
+</script>
+</body>
+</html>
